@@ -1,0 +1,19 @@
+
+properties get/set:
+from:
+    double m_gunRotationRateRadians
+    {
+        get { return m_gunRotationRate; }
+        set { m_gunRotationRate = value; }
+    }
+to:
+	double getgunRotationRateRadians()
+	{
+		return m_gunRotationRate;
+	}
+	void setgunRotationRateRadians( double value )
+	{
+		m_gunRotationRate = value;
+	}
+[ \t]+([^ \t\n]+)[ \t]+m_(.*)\n[^{\n]+\{\n[ \t]+get[ \t]+\{ ([^\}]+) \}\n[ \t]+set[ \t]+\{ ([^\}]+) \}\n.*
+\t$1 get$2()\n\t{\n\t\t$3\n\t}\n\tvoid set$2( $1 value )\n\t{\n\t\t$4\n\t}

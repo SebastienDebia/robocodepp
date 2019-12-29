@@ -1,0 +1,57 @@
+
+# *.cpp",
+# testBots/*.cpp
+
+cxx = ccache clang++
+ar = ar
+
+unused = -L$builddir 
+
+builddir = build
+
+cflags = -O3 -Wall -std=c++17 $
+         -Wextra -Wno-deprecated $
+         -Wno-missing-field-initializers $
+         -Wno-unused-parameter -fcolor-diagnostics
+
+ldflags = -Wl,-rpath,. -fcolor-diagnostics $
+          -lboost_filesystem -lboost_system $
+          -lsfml-graphics -lsfml-window -lsfml-system -lprofiler 
+
+rule cxx
+  command = $cxx -MMD -MT $out -MF $out.d $cflags -c $in -o $out
+  #description = CXX $out
+  depfile = $out.d
+  deps = gcc
+
+rule ar
+  command = rm -f $out && $ar crs $out $in
+  description = AR $out
+
+rule link
+  command = $cxx $ldflags -o $out $in $libs
+  description = LINK $out
+
+build $builddir/main.o: cxx main.cpp
+build $builddir/Arc2D.o: cxx Arc2D.cpp
+build $builddir/Bullet.o: cxx Bullet.cpp
+build $builddir/BulletHitBulletEvent.o: cxx BulletHitBulletEvent.cpp
+build $builddir/HitWallEvent.o: cxx HitWallEvent.cpp
+build $builddir/HitRobotEvent.o: cxx HitRobotEvent.cpp
+build $builddir/HSL.o: cxx HSL.cpp
+build $builddir/Match.o: cxx Match.cpp
+build $builddir/Robot.o: cxx Robot.cpp
+build $builddir/RobotStatistics.o: cxx RobotStatistics.cpp
+build $builddir/Round.o: cxx Round.cpp
+build $builddir/UI.o: cxx UI.cpp
+build $builddir/World.o: cxx World.cpp
+build $builddir/Battle.o: cxx Battle.cpp
+
+build $builddir/testBots/SpinRobot.o: cxx testBots/SpinRobot.cpp
+build $builddir/testBots/StaticRobot.o: cxx testBots/StaticRobot.cpp
+
+build robocodepp: link $builddir/main.o $builddir/Bullet.o $builddir/HSL.o $builddir/Arc2D.o $
+                       $builddir/BulletHitBulletEvent.o $builddir/HitWallEvent.o $builddir/HitRobotEvent.o $
+                       $builddir/Match.o $builddir/Robot.o $builddir/RobotStatistics.o $builddir/Round.o $
+                       $builddir/UI.o $builddir/World.o $builddir/Battle.o $
+                       $builddir/testBots/SpinRobot.o $builddir/testBots/StaticRobot.o
