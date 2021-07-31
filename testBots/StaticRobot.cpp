@@ -13,5 +13,5 @@ void StaticRobot::run()
     setTurnGun( m_gunSpin );
     setTurnRadar( m_radarSpin );
     setFire( 3 );
-    setEnergy( 100, true );
+    //setEnergy( 100, true ); // never dies (for debugging)
 }
